@@ -3,8 +3,8 @@ from bs4 import BeautifulSoup
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
-CLIENT_ID = '8414b46ee2e74788a0119e21144de7e2'
-CLIENT_SEC = '3eb88afccdc94806885d15814294e8bf'
+CLIENT_ID = ClientID
+CLIENT_SEC = ClientSecret
 OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 URI = 'http://example.com'
 SCOPE = 'playlist-modify-private'
@@ -49,7 +49,6 @@ songs_uri = []
 year = date.split('-')[0]
 for title in titles_list:
     result = sp.search(q=f"track:{title} year:{year}", type="track")
-    print(result)
     try:
         uri = result["tracks"]["items"][0]["uri"]
         songs_uri.append(uri)
@@ -59,3 +58,4 @@ for title in titles_list:
 new_playlist = sp.user_playlist_create(user=user_id, name=f'{year} Billboard 100', public=False)
 playlist_id = new_playlist['id']
 
+sp.playlist_add_items(playlist_id=playlist_id, items=songs_uri, position=None)
