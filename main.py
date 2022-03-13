@@ -1,5 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
+import os
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
+
+CLIENT_ID = '8414b46ee2e74788a0119e21144de7e2'
+CLIENT_SEC = '3eb88afccdc94806885d15814294e8bf'
 
 date = input('Where I should you take? Type date in YYY-MM-DD format ')
 URL = f'https://www.billboard.com/charts/hot-100/{date}'
@@ -15,3 +21,29 @@ first_title = soup.find(name='a', class_="c-title__link lrv-a-unstyle-link").get
 titles_list = [title.getText().strip() for title in titles]
 titles_list.append(first_title)
 print(titles_list)
+
+OAUTH_AUTHORIZE_URL= 'https://accounts.spotify.com/authorize'
+OAUTH_TOKEN_URL= 'https://accounts.spotify.com/api/token'
+
+URI = 'http://example.com'
+SCOPE = 'playlist-modify-private'
+
+auth_response = requests.post(OAUTH_TOKEN_URL, {
+"grant_type": "client_credentials",
+"client_id":CLIENT_ID,
+"client_secret":CLIENT_SEC,
+})
+
+auth_response_data = auth_response.json()
+access_token = auth_response_data["access_token"]
+
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
+    scope=SCOPE,
+    redirect_uri=URI,
+    client_id=CLIENT_ID,
+    client_secret=CLIENT_SEC,
+    show_dialog=True,
+    cache_path=access_token
+    )
+)
+user_id = sp.current_user()['id']
