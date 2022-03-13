@@ -46,7 +46,13 @@ titles_list = [title.getText().strip() for title in titles]
 titles_list.append(first_title)
 print(titles_list)
 
+songs_uri = []
 year = date.split('-')[0]
 for title in titles_list:
     result = sp.search(q=f"track:{title} year:{year}", type="track")
     print(result)
+    try:
+        uri = result["tracks"]["items"][0]["uri"]
+        songs_uri.append(uri)
+    except IndexError:
+        continue
