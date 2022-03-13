@@ -1,19 +1,18 @@
 import requests
 from bs4 import BeautifulSoup
-import os
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
 CLIENT_ID = '8414b46ee2e74788a0119e21144de7e2'
 CLIENT_SEC = '3eb88afccdc94806885d15814294e8bf'
-OAUTH_TOKEN_URL= 'https://accounts.spotify.com/api/token'
+OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 URI = 'http://example.com'
 SCOPE = 'playlist-modify-private'
 
 auth_response = requests.post(OAUTH_TOKEN_URL, {
             "grant_type": "client_credentials",
-            "client_id":CLIENT_ID,
-            "client_secret":CLIENT_SEC,
+            "client_id": CLIENT_ID,
+            "client_secret": CLIENT_SEC,
     }
 )
 
@@ -56,3 +55,7 @@ for title in titles_list:
         songs_uri.append(uri)
     except IndexError:
         continue
+
+new_playlist = sp.user_playlist_create(user=user_id, name=f'{year} Billboard 100', public=False)
+playlist_id = new_playlist['id']
+
